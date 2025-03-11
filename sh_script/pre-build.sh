@@ -18,7 +18,7 @@ process_args() {
 patch-ring() {
     # apply the patch set for ring
     pushd external/ring
-    git reset --hard 464d367252354418a2c17feb806876d4d89a8508
+    git reset --hard 52b239c52ee7756fbc3731f59d7236ee6f4af719
     git clean -xdf
     case "$TARGET_OPTION" in
         "x86_64-unknown-none")
@@ -28,7 +28,6 @@ patch-ring() {
             echo "Unsupported target for ring, builds may not work!"
         ;;
     esac
-    git apply ../patches/ring/0001-NFC-Address-Clippy-unused-import-warning.patch
     popd
 }
 
