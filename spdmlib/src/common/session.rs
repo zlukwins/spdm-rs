@@ -50,11 +50,20 @@ pub struct SpdmSessionDheSecretRoot {
     pub master_secret: SpdmMasterSecretStruct,
 }
 
-#[derive(Debug, Clone, Default, Zeroize, ZeroizeOnDrop)]
+#[derive(Debug, Clone, Zeroize, ZeroizeOnDrop)]
 pub struct SpdmSessionSecretParam {
     pub encryption_key: SpdmAeadKeyStruct,
     pub salt: SpdmAeadIvStruct,
     pub sequence_number: u64,
+}
+impl Default for SpdmSessionSecretParam {
+    fn default() -> Self {
+        Self {
+            encryption_key: SpdmAeadKeyStruct::default(),
+            salt: SpdmAeadIvStruct::default(),
+            sequence_number: 0xFFFFFFFFFFFFFFFFu64 - 50,
+        }
+    }
 }
 
 #[derive(Debug, Clone, Default, Zeroize, ZeroizeOnDrop)]
@@ -636,7 +645,7 @@ impl SpdmSession {
                 "!!! request_direction.salt !!!: {:02x?}\n",
                 self.application_secret.request_direction.salt.as_ref()
             );
-            self.application_secret.request_direction.sequence_number = 0;
+            self.application_secret.request_direction.sequence_number = 0xFFFFFFFFFFFFFFFFu64 - 50;
         }
 
         if update_responder {
@@ -686,7 +695,7 @@ impl SpdmSession {
                 "!!! response_direction.salt !!!: {:02x?}\n",
                 self.application_secret.response_direction.salt.as_ref()
             );
-            self.application_secret.response_direction.sequence_number = 0;
+            self.application_secret.response_direction.sequence_number = 0xFFFFFFFFFFFFFFFFu64 - 50;
         }
         Ok(())
     }
